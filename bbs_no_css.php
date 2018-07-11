@@ -14,18 +14,18 @@ if (!empty($_POST)){
 
     if (!empty($nickname || $comment)){
 
-    $sql = 'INSERT INTO `posts`(`nickname`,`comment`)VALUES(?,?)';
+    $sql = 'INSERT INTO `posts`(`nickname`,`comment`,`created`)VALUES(?,?,?)';
 
     $data[] = $nickname;
     $data[] = $comment;
-
+    $data[] = date("Y-m-d H:i:s");
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
-    }
-    }
-    $dbh = null;
+}
+}
 
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -39,6 +39,24 @@ if (!empty($_POST)){
       <p><button type="submit" >つぶやく</button></p>
     </form>
     <!-- ここにニックネーム、つぶやいた内容、日付を表示する -->
+<?php
+   $sql = 'SELECT * FROM `posts` ORDER BY created DESC';
+$stmt = $dbh->prepare($sql);
+$stmt->execute();
+
+while (1) {
+    $rec = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($rec == false){
+        break;
+    }
+    echo $rec['nickname'] . '<br>';
+    echo $rec['comment'] . '<br>';
+    echo $rec['created'] . '<br>';
+    echo '<hr>';
+}
+    $dbh = null;
+
+?>
 
 </body>
 </html>
