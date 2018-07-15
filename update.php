@@ -6,9 +6,9 @@
     $dbh = new PDO($dsn,$user,$password);
     $dbh->query('SET NAMES utf8');
 
-    $nickname = $_POST['nickname'];
-    $comment = $_POST['comment'];
-    $id = $_POST['id'];
+    $nickname = htmlspecialchars($_POST['nickname']);
+    $comment = htmlspecialchars($_POST['comment']);
+    $id = htmlspecialchars($_POST['id']);
 
     $sql = 'UPDATE `posts` SET `nickname` = ?, `comment` = ? WHERE `id` = ? ';
     $data[] = $nickname;
